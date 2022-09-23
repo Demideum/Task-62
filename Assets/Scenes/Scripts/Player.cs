@@ -8,28 +8,31 @@ public class Player : MonoBehaviour
     [SerializeField] private float _health;
 
     private float _maxHealth = 100;
-    private float _damage = 10;
-    private float _heal = 10;
+    private float _minHealth = 0;
 
-    public UnityAction ChangingHealth;
+    public event UnityAction ChangedHealth;
     public float Health => _health;
     public float MaxHealth => _maxHealth;
 
-    public void TakeDamage()
+    public void TakeDamage ()
     {
+        float damage = 10;
+
         if (_health > 0)
         {
-            _health -= _damage;
+            _health -= Mathf.Clamp(damage, _minHealth, _maxHealth);
         }
-        ChangingHealth?.Invoke();
+        ChangedHealth?.Invoke();
     }
 
     public void TakeHeal()
     {
+        float heal = 10;
+
         if (_health < _maxHealth)
         {
-            _health += _heal;
+            _health += Mathf.Clamp(heal, _minHealth, _maxHealth);
         }
-        ChangingHealth?.Invoke();
+        ChangedHealth?.Invoke();
     }
 }
