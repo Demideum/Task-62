@@ -9,7 +9,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float _currentHealth;
 
     private float _maxHealth = 100;
-    private float _minHealth = 0;
     private float _unitHealth = 1;
     private float _targetHealth;
 
@@ -24,7 +23,7 @@ public class Player : MonoBehaviour
 
         if (_currentHealth > 0)
         {
-            _currentHealth -= Mathf.Clamp(_targetHealth, _minHealth, _maxHealth);
+            _currentHealth -= Mathf.Clamp(_targetHealth, _targetHealth, _currentHealth);
         }
         ChangedHealth?.Invoke();
     }
@@ -36,7 +35,7 @@ public class Player : MonoBehaviour
 
         if (_currentHealth < _maxHealth)
         {
-            _currentHealth += Mathf.Clamp(_targetHealth, _minHealth, _maxHealth);
+            _currentHealth += Mathf.Clamp(_targetHealth, _targetHealth, _currentHealth);
         }
         ChangedHealth?.Invoke();
     }
