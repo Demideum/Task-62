@@ -9,8 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _currentHealth;
 
     private float _maxHealth = 100;
-    private float _unitHealth = 1;
-    private float _targetHealth;
+    private float _minHealth = 0;
 
     public event UnityAction ChangedHealth;
     public float Health => _currentHealth;
@@ -19,11 +18,10 @@ public class Player : MonoBehaviour
     public void TakeDamage ()
     {
         float damage = 10;
-        _targetHealth = _unitHealth * damage;
-
+       
         if (_currentHealth > 0)
         {
-            _currentHealth -= Mathf.Clamp(_targetHealth, _targetHealth, _currentHealth);
+            _currentHealth = Mathf.Clamp(_currentHealth - damage, _minHealth, _maxHealth);
         }
         ChangedHealth?.Invoke();
     }
@@ -31,11 +29,10 @@ public class Player : MonoBehaviour
     public void TakeHeal()
     {
         float heal = 10;
-        _targetHealth = _unitHealth * heal;
-
+        
         if (_currentHealth < _maxHealth)
         {
-            _currentHealth += Mathf.Clamp(_targetHealth, _targetHealth, _currentHealth);
+            _currentHealth = Mathf.Clamp(_currentHealth + heal, _minHealth, _maxHealth);
         }
         ChangedHealth?.Invoke();
     }
