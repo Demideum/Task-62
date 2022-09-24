@@ -2,25 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.GraphicsBuffer;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float _health;
+    [SerializeField] private float _currentHealth;
 
     private float _maxHealth = 100;
     private float _minHealth = 0;
+    private float _unitHealth = 1;
+    private float _targetHealth;
 
     public event UnityAction ChangedHealth;
-    public float Health => _health;
+    public float Health => _currentHealth;
     public float MaxHealth => _maxHealth;
 
     public void TakeDamage ()
     {
         float damage = 10;
+        _targetHealth = _unitHealth * damage;
 
-        if (_health > 0)
+        if (_currentHealth > 0)
         {
-            _health -= Mathf.Clamp(damage, _minHealth, _maxHealth);
+            _currentHealth -= Mathf.Clamp(_targetHealth, _minHealth, _maxHealth);
         }
         ChangedHealth?.Invoke();
     }
@@ -28,10 +32,11 @@ public class Player : MonoBehaviour
     public void TakeHeal()
     {
         float heal = 10;
+        _targetHealth = _unitHealth * heal;
 
-        if (_health < _maxHealth)
+        if (_currentHealth < _maxHealth)
         {
-            _health += Mathf.Clamp(heal, _minHealth, _maxHealth);
+            _currentHealth += Mathf.Clamp(_targetHealth, _minHealth, _maxHealth);
         }
         ChangedHealth?.Invoke();
     }
